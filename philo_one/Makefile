@@ -6,7 +6,7 @@
 #    By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/14 14:18:05 by nelisabe          #+#    #+#              #
-#    Updated: 2021/01/14 17:18:58 by nelisabe         ###   ########.fr        #
+#    Updated: 2021/01/26 18:21:39 by nelisabe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,9 @@ FLAGS =	#-Wall -Wextra -Werror
 HEADER = philo_one.h
 
 SRC =	errors.c \
-		ft_itoa.c \
-		ft_atoi.c
+		parser.c \
+		init_philosophers.c \
+		util_functions.c
 
 MAIN =	main.c
 

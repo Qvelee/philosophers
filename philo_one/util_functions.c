@@ -1,20 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   util_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/13 17:19:36 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/01/14 17:30:39 by nelisabe         ###   ########.fr       */
+/*   Created: 2021/01/26 15:37:35 by nelisabe          #+#    #+#             */
+/*   Updated: 2021/01/26 17:23:42 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(const char *str)
+#include "philo_one.h"
+
+int		free_memory(int ret, void *mem_1, void *mem_2, void *mem_3)
 {
-	int result;
-	int index;
-	int minus;
+	if (mem_1)
+		free(mem_1);
+	if (mem_2)
+		free(mem_2);
+	if (mem_3)
+		free(mem_3);
+	return (ret);
+}
+
+int		ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+long	ft_atol(const char *str)
+{
+	long	result;
+	int 	index;
+	int 	minus;
 
 	index = 0;
 	result = 0;

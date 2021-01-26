@@ -6,11 +6,17 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:20 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/01/14 17:34:05 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/01/26 17:30:50 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+
+int		err_message(char *message)
+{
+	printf("%s: %s\n", ERR_SMTNWR, message);
+	return (1);
+}
 
 int		err_malloc(void)
 {
@@ -20,7 +26,7 @@ int		err_malloc(void)
 
 int		err_invalid_argument(char *argument)
 {
-	printf("%s %s\n", ERR_INV_ARGS, argument);
+	printf("%s '%s'\n", ERR_INV_ARGS, argument);
 	return (1);
 }
 
