@@ -6,7 +6,7 @@
 #    By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/14 14:18:05 by nelisabe          #+#    #+#              #
-#    Updated: 2021/01/26 18:21:39 by nelisabe         ###   ########.fr        #
+#    Updated: 2021/02/02 16:49:43 by nelisabe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,16 @@ NAME =	philo_one
 
 COMP =	clang
 
-FLAGS =	#-Wall -Wextra -Werror
+FLAGS =	-pthread #-Wall -Wextra -Werror
 
 HEADER = philo_one.h
 
 SRC =	errors.c \
 		parser.c \
-		init_philosophers.c \
-		util_functions.c
+		init_philos.c \
+		util_functions.c \
+		philo_one.c \
+		philo_utils.c
 
 MAIN =	main.c
 
@@ -34,7 +36,7 @@ all: temp $(NAME)
 temp:
 	mkdir -p $(OBJ_D)
 
-$(NAME): $(OBJ) $(HEADER)
+$(NAME): $(OBJ) $(MAIN) $(HEADER)
 	$(COMP) $(FLAGS) $(OBJ) $(MAIN) -o $@
 	
 $(addprefix $(OBJ_D), %.o): %.c $(HEADER)

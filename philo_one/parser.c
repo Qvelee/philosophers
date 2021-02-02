@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 15:36:43 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/01/26 18:19:06 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/02 14:51:03 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ int		parse(int argc, char **argv, t_core *core)
 		return (1);
 	if (argc == 6 && get_one_param(argv[5], (long *)&core->count_of_eating))
 		return (1);
+	else if (argc == 5)
+		core->count_of_eating = -1;
 	return (0);
 }

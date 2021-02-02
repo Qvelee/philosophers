@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:18:16 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/01/26 18:38:19 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/02 15:56:16 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int		main(int argc, char **argv)
 
 	if (parse(argc, argv, &core))
 		return (1);
-	if (init_philosophers(&core))
+	if (init_philos(&core))
 		return (1);
+	if (start_philos(&core))
+		return (err_philos(&core));
+	destoy_allocated(&core);
 	return (0);
 }
