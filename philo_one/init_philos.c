@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/02 19:29:39 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/03 15:56:09 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,14 @@ void	set_philos_values(t_core *core)
 	while (++index < core->count_of_philos)
 	{
 		core->philos[index].status = 1;
-		core->philos[index].last_time_eat = 0;
+		core->philos[index].last_time_eat = get_time();
 		core->philos[index].index = index;
+		core->philos[index].time_to_die = core->time_to_die;
+		core->philos[index].time_to_eat = core->time_to_eat;
+		core->philos[index].time_to_sleep = core->time_to_sleep;
+		core->philos[index].start_time = core->start_time;
+		core->philos[index].lock = &core->lock;
+		core->philos[index].exit = &core->exit;
 		left_fork = !index ? core->count_of_philos - 1 : index - 1;
 		right_fork = index == core->count_of_philos	- 1 ? 0 : index;
 		core->philos[index].left_fork = &core->forks[left_fork];
@@ -68,9 +74,8 @@ int		init_philos(t_core *core)
 	if (init_mutexes(core))
 		return (free_memory(err_message("can't init mutex"), \
 			(void *)core->philos, (void *)core->forks));
-	set_philos_values(core);
 	core->start_time = get_time();
-	core->index = 0;
 	core->exit = 0;
+	set_philos_values(core);
 	return (0);
 }

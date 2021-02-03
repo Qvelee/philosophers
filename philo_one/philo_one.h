@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:57 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/02 19:29:08 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/03 16:35:33 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ typedef	struct	s_philos
 	int			status;
 	int			index;
 	size_t		last_time_eat;
+	size_t		time_to_die;
+	size_t		time_to_eat;
+	size_t		time_to_sleep;
+	int			count_of_eating;
+	size_t		start_time;
+	t_mutex		*lock;
+	int			*exit;
 	pthread_t	thread;
 	t_mutex		*left_fork;
 	t_mutex		*rigth_fork;
@@ -47,17 +54,18 @@ typedef	struct	s_core
 	t_mutex		lock;
 	t_mutex		*forks;
 	int			exit;
-	int			index;
 	t_philos	*philos;
 }				t_core;
 
 int		parse(int argc, char **argv, t_core *core);
 int		init_philos(t_core *core);
+int		take_forks(t_philos *philo);
 void	destroy_mutexes(int stop, t_mutex **mutexes);
 void	destoy_allocated(t_core *core);
 int		wait_threads(int stop, t_philos *philos);
 int		get_time(void);
 int		start_philos(t_core *core);
+int		mssleep(size_t msseconds);
 long	ft_atol(const char *str);
 int		ft_isdigit(int c);
 int		free_memory(int ret, void *mem_1, void *mem_2);

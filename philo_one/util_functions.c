@@ -6,11 +6,26 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 15:37:35 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/02 15:36:07 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/03 15:38:35 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+
+int		mssleep(size_t msseconds)
+{
+	if (usleep(msseconds * 1000))
+		return (-1);
+	return (0);
+}
+
+int		get_time(void)
+{
+	struct	timeval	time;
+
+	gettimeofday(&time, NULL);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
 
 int		free_memory(int ret, void *mem_1, void *mem_2)
 {

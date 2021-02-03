@@ -6,30 +6,77 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/02 19:55:34 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/03 16:54:34 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-void	*philopher(void *link_to_core)
+void	supervisor(t_core *core)
 {
-	t_core	*core;
-	int		thread_philo;
-
-	core = (t_core *)link_to_core;
-	printf("%d\n", core->index);
-	thread_philo = core->index;
-	// printf("Philosopher %d is up\n", thread_philo);
-	if (thread_philo == 0)
+	int		index;
+	
+	while (!core->exit)
 	{
-		usleep(1000000);
-		// printf("Philosopher %d is still up\n", thread_philo);
+		index = -1;
+		while (++index < core->count_of_philos)
+			if (get_time() - core->philos[index].last_time_eat > \
+				core->time_to_die)
+			{
+				core->exit = 1;
+				printf("%lu %d died\n", \
+					get_time() - core->start_time, index + 1);
+				break ;
+			}
+	}
+}
+
+int		take_fork_and_eat(t_philos *philo)
+{
+	if (*philo->exit)
+		return (1);
+	if (take_forks(philo))
+		return (1);
+	if (!(*philo->exit))
+	{
+		philo->last_time_eat = get_time();
+		printf("%lu %d is eating\n", \
+			get_time() - philo->start_time, philo->index + 1);
+		mssleep(philo->time_to_eat);
+	}
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->rigth_fork);
+	return (0);
+}
+
+int		goto_sleep(t_philos *philo)
+{
+	if (*philo->exit)
+		return (1);
+	printf("%lu %d is sleeping\n", \
+		get_time() - philo->start_time, philo->index + 1);
+	mssleep(philo->time_to_sleep);
+	if (*philo->exit)
+		return (1);
+	printf("%lu %d is thinking\n", \
+		get_time() - philo->start_time, philo->index + 1);
+	return (0);
+}
+
+void	*philosopher(void *link_to_philo)
+{
+	t_philos	*philo;
+
+	philo = (t_philos *)link_to_philo;
+	while (!(*philo->exit))
+	{
+		if (take_fork_and_eat(philo))
+			break ;
+		if (goto_sleep(philo))
+			break ;
 	}
 	return NULL;
 }
-
-// add all philos parameters in philos array
 
 int		start_philos(t_core *core)
 {
@@ -38,18 +85,15 @@ int		start_philos(t_core *core)
 	index = -1;
 	while (++index < core->count_of_philos)
 	{
-		core->philos[index].index = index;
-		core->index = index;
-		// printf("%d\n", core->index);
 		if (pthread_create(&core->philos[index].thread, NULL, \
-			philopher, (void *)core))
+			philosopher, (void *)&core->philos[index]))
 		{
 			core->exit = 1;
 			wait_threads(index, core->philos);
 			return (err_message("can't create thread"));
 		}
-		usleep(100);
 	}
+	supervisor(core);
 	if (wait_threads(core->count_of_philos, core->philos))
 		return (err_message("can't join some thread"));
 	return (0);
