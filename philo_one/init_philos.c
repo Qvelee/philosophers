@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/03 15:56:09 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/05 14:51:46 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,12 @@ void	set_philos_values(t_core *core)
 		core->philos[index].time_to_die = core->time_to_die;
 		core->philos[index].time_to_eat = core->time_to_eat;
 		core->philos[index].time_to_sleep = core->time_to_sleep;
+		core->philos[index].count_of_meals = 0;
 		core->philos[index].start_time = core->start_time;
 		core->philos[index].lock = &core->lock;
 		core->philos[index].exit = &core->exit;
 		left_fork = !index ? core->count_of_philos - 1 : index - 1;
-		right_fork = index == core->count_of_philos	- 1 ? 0 : index;
+		right_fork = index;
 		core->philos[index].left_fork = &core->forks[left_fork];
 		core->philos[index].rigth_fork = &core->forks[right_fork];
 	}

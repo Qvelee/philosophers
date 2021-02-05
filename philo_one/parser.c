@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 15:36:43 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/02 14:51:03 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/05 15:48:23 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int		get_one_param(char *argument, long *save_to)
 	while (argument[++index])
 		if (!ft_isdigit(argument[index]))
 			return (err_invalid_argument(argument));
-	*save_to = ft_atol(argument);
+	if (!(*save_to = ft_atol(argument)))
+		return (err_invalid_argument(argument));
 	return (0);
 }
 
@@ -30,6 +31,8 @@ int		parse(int argc, char **argv, t_core *core)
 		return (err_arguments());
 	if (get_one_param(argv[1], (long *)&core->count_of_philos))
 		return (1);
+	if (core->count_of_philos == 1)
+		return (err_message("can't exec with 1 philosopher"));
 	if (get_one_param(argv[2], (long *)&core->time_to_die))
 		return (1);
 	if (get_one_param(argv[3], (long *)&core->time_to_eat))

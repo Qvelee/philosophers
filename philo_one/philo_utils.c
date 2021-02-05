@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:31:20 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/03 16:52:06 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/05 14:21:07 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,29 @@ int		drop_forks(t_mutex *fork_1, t_mutex *fork_2)
 	return (0);
 }
 
+int		message(char *message, int death, t_philos *philo)
+{
+	if (pthread_mutex_lock(philo->lock))
+		return (1);
+	if (!(*philo->exit) || death)
+		printf(message, get_time() - philo->start_time, philo->index + 1);
+	if (pthread_mutex_unlock(philo->lock))
+		return (1);
+	return (0);
+}
+
 int		take_forks(t_philos *philo)
 {
 	t_mutex	*first;
 	t_mutex	*second;
 
-	first = philo->index % 2 ? philo->left_fork : philo->rigth_fork;
-	second = philo->index % 2 ? philo->rigth_fork : philo->left_fork;
+	first = philo->left_fork;
+	second = philo->rigth_fork;
 	if (pthread_mutex_lock(first))
 		return ((*philo->exit = err_message("can't lock mutex")));
 	if (*philo->exit)
 		return (!drop_forks(first, NULL));
-	printf("%lu %d has taken a fork\n", \
-		get_time() - philo->start_time, philo->index + 1);
+	message("%lu %d has taken a fork\n", 0, philo);
 	if (pthread_mutex_lock(second))
 	{
 		pthread_mutex_unlock(first);
@@ -41,8 +51,7 @@ int		take_forks(t_philos *philo)
 	}
 	if (*philo->exit)
 		return (!drop_forks(first, second));
-	printf("%lu %d has taken a fork\n", \
-		get_time() - philo->start_time, philo->index + 1);
+	message("%lu %d has taken a fork\n", 0, philo);
 	return (0);
 }
 
@@ -61,9 +70,8 @@ int		wait_threads(int stop, t_philos *philos)
 
 void	destoy_allocated(t_core *core)
 {
-	pthread_mutex_destroy(&core->lock);
+	if (pthread_mutex_destroy(&core->lock))
+		err_message("can't destroy mutex");
 	destroy_mutexes(core->count_of_philos, &core->forks);
 	free_memory(0, (void *)core->philos, (void *)core->forks);
 }
-
-

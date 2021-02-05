@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:57 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/03 16:35:33 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/05 14:51:38 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef	struct	s_philos
 	size_t		time_to_die;
 	size_t		time_to_eat;
 	size_t		time_to_sleep;
-	int			count_of_eating;
+	int			count_of_meals;
 	size_t		start_time;
 	t_mutex		*lock;
 	int			*exit;
@@ -60,6 +60,8 @@ typedef	struct	s_core
 int		parse(int argc, char **argv, t_core *core);
 int		init_philos(t_core *core);
 int		take_forks(t_philos *philo);
+int		message(char *message, int death, t_philos *philo);
+int		drop_forks(t_mutex *fork_1, t_mutex *fork_2);
 void	destroy_mutexes(int stop, t_mutex **mutexes);
 void	destoy_allocated(t_core *core);
 int		wait_threads(int stop, t_philos *philos);

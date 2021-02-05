@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/03 16:54:34 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/05 16:17:58 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,27 @@
 void	supervisor(t_core *core)
 {
 	int		index;
+	int		meals;
 	
 	while (!core->exit)
 	{
 		index = -1;
+		meals = 0;
 		while (++index < core->count_of_philos)
+		{
 			if (get_time() - core->philos[index].last_time_eat > \
 				core->time_to_die)
 			{
 				core->exit = 1;
-				printf("%lu %d died\n", \
-					get_time() - core->start_time, index + 1);
+				message("%lu %d died\n", 1, &core->philos[index]);
 				break ;
 			}
+			if (core->count_of_eating == -1 || \
+				core->philos[index].count_of_meals < core->count_of_eating)
+				meals = 1;
+		}
+		if (!meals)
+			core->exit = 1;
 	}
 }
 
@@ -40,12 +48,11 @@ int		take_fork_and_eat(t_philos *philo)
 	if (!(*philo->exit))
 	{
 		philo->last_time_eat = get_time();
-		printf("%lu %d is eating\n", \
-			get_time() - philo->start_time, philo->index + 1);
+		message("%lu %d is eating\n", 0, philo);
+		philo->count_of_meals++;
 		mssleep(philo->time_to_eat);
 	}
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->rigth_fork);
+	drop_forks(philo->left_fork, philo->rigth_fork);
 	return (0);
 }
 
@@ -53,13 +60,11 @@ int		goto_sleep(t_philos *philo)
 {
 	if (*philo->exit)
 		return (1);
-	printf("%lu %d is sleeping\n", \
-		get_time() - philo->start_time, philo->index + 1);
+	message("%lu %d is sleeping\n", 0, philo);
 	mssleep(philo->time_to_sleep);
 	if (*philo->exit)
 		return (1);
-	printf("%lu %d is thinking\n", \
-		get_time() - philo->start_time, philo->index + 1);
+	message("%lu %d is thinking\n", 0, philo);
 	return (0);
 }
 
@@ -68,6 +73,8 @@ void	*philosopher(void *link_to_philo)
 	t_philos	*philo;
 
 	philo = (t_philos *)link_to_philo;
+	if (philo->index % 2)
+		usleep(100);
 	while (!(*philo->exit))
 	{
 		if (take_fork_and_eat(philo))
@@ -75,7 +82,7 @@ void	*philosopher(void *link_to_philo)
 		if (goto_sleep(philo))
 			break ;
 	}
-	return NULL;
+	return (NULL);
 }
 
 int		start_philos(t_core *core)
