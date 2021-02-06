@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 17:32:21 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/06 17:38:03 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	*philosopher(void *link_to_philo)
 	t_philos	*philo;
 
 	philo = (t_philos *)link_to_philo;
-	if (philo->index % 2)
-		usleep(100);
+	// if (philo->index % 2)
+	// 	usleep(100);
 	// if (!(philo->index % 2))
 		// usleep(100);
 	while (!(*philo->exit))
