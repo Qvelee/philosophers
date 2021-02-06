@@ -6,46 +6,40 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 13:31:35 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/06 17:09:42 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
-int		destroy_mutexes(int stop, t_mutex **mutexes)
+int		init_semaphores(t_core *core)
 {
-	int		index;
-
-	index = -1;
-	while (++index < stop)
-		if (pthread_mutex_destroy(&(*mutexes)[index]))
-			return (err_message("can't destroy mutex"));
-	return (0);
-}
-
-int		init_mutexes(t_core *core)
-{
-	int 	index;
-
-	index = -1;
-	if (pthread_mutex_init(&core->lock, NULL))
-		return (1);
-	while (++index < core->count_of_philos)
-		if (pthread_mutex_init(&core->forks[index], NULL))
-		{
-			destroy_mutexes(index, &core->forks);
-			if (pthread_mutex_destroy(&core->lock))
-				err_message("can't destroy mutex");
-			return (1);
-		}
+	//fix
+	sem_unlink("forks");
+	sem_unlink("lock");
+	sem_unlink("wait");
+	if (!(core->forks = sem_open("forks", O_CREAT, 0644, core->count_of_philos)))
+		return (err_message("can't create semaphore"));
+	if (!(core->lock = sem_open("lock", O_CREAT, 0644, 1)))
+	{
+		if (sem_close(core->forks))
+			err_message("can't close semaphore");
+		return (err_message("can't create semaphore"));
+	}
+	if (!(core->wait = sem_open("wait", O_CREAT, 0644, 1)))
+	{
+		if (sem_close(core->forks))
+			err_message("can't close semaphore");
+		if (sem_close(core->lock))
+			err_message("can't close semaphore");
+		return (err_message("can't create semaphore"));
+	}
 	return (0);
 }
 
 void	set_philos_values(t_core *core)
 {
 	int		index;
-	int		left_fork;
-	int		right_fork;
 
 	index = -1;
 	while (++index < core->count_of_philos)
@@ -58,12 +52,10 @@ void	set_philos_values(t_core *core)
 		core->philos[index].time_to_sleep = core->time_to_sleep;
 		core->philos[index].count_of_meals = 0;
 		core->philos[index].start_time = core->start_time;
-		core->philos[index].lock = &core->lock;
+		core->philos[index].forks = core->forks;
+		core->philos[index].lock = core->lock;
+		core->philos[index].wait = core->wait;
 		core->philos[index].exit = &core->exit;
-		left_fork = !index ? core->count_of_philos - 1 : index - 1;
-		right_fork = index;
-		core->philos[index].left_fork = &core->forks[left_fork];
-		core->philos[index].rigth_fork = &core->forks[right_fork];
 	}
 }
 
@@ -72,12 +64,8 @@ int		init_philos(t_core *core)
 	if (!(core->philos = \
 		(t_philos *)malloc(sizeof(t_philos) * core->count_of_philos)))
 		return (err_malloc());
-	if (!(core->forks = \
-		(t_mutex *)malloc(sizeof(t_mutex) * core->count_of_philos)))
-		return (free_memory(err_malloc(), (void *)core->philos, NULL));
-	if (init_mutexes(core))
-		return (free_memory(err_message("can't init mutex"), \
-			(void *)core->philos, (void *)core->forks));
+	if (init_semaphores(core))
+		return (free_memory(1, (void *)core->philos, NULL));
 	core->start_time = get_time();
 	core->exit = 0;
 	set_philos_values(core);

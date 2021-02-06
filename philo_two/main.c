@@ -6,11 +6,11 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:18:16 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 13:32:00 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/06 13:45:18 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 int		main(int argc, char **argv)
 {

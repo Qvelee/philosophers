@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:57 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 13:31:41 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/06 17:20:14 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <stdio.h>
+#include <semaphore.h>
+#include <fcntl.h>
 
 #define	ERR_ARGS "error: wrong number of arguments"
 #define	ERR_INV_ARGS "error: invalid argument"
@@ -36,11 +38,11 @@ typedef	struct	s_philos
 	size_t		time_to_sleep;
 	int			count_of_meals;
 	size_t		start_time;
-	t_mutex		*lock;
 	int			*exit;
+	sem_t		*forks;
+	sem_t		*lock;
+	sem_t		*wait;
 	pthread_t	thread;
-	t_mutex		*left_fork;
-	t_mutex		*rigth_fork;
 }				t_philos;
 
 typedef	struct	s_core
@@ -51,9 +53,10 @@ typedef	struct	s_core
 	size_t		time_to_sleep;
 	int			count_of_eating;
 	size_t		start_time;
-	t_mutex		lock;
-	t_mutex		*forks;
 	int			exit;
+	sem_t		*forks;
+	sem_t		*lock;
+	sem_t		*wait;
 	t_philos	*philos;
 }				t_core;
 
@@ -61,7 +64,7 @@ int		parse(int argc, char **argv, t_core *core);
 int		init_philos(t_core *core);
 int		take_forks(t_philos *philo);
 int		message(char *message, int death, t_philos *philo);
-int		drop_forks(t_mutex *fork_1, t_mutex *fork_2);
+int		post_semaphores(sem_t *sem_1, int count_1, sem_t *sem_2);
 int		destroy_mutexes(int stop, t_mutex **mutexes);
 int		destoy_allocated(t_core *core);
 int		wait_threads(int stop, t_philos *philos);

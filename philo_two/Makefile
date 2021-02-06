@@ -6,23 +6,23 @@
 #    By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/14 14:18:05 by nelisabe          #+#    #+#              #
-#    Updated: 2021/02/06 13:39:13 by nelisabe         ###   ########.fr        #
+#    Updated: 2021/02/06 13:44:09 by nelisabe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME =	philo_one
+NAME =	philo_two
 
 COMP =	clang
 
-FLAGS =	-pthread -Wall -Wextra -Werror
+FLAGS =	-pthread #-Wall -Wextra -Werror
 
-HEADER = philo_one.h
+HEADER = philo_two.h
 
 SRC =	errors.c \
 		parser.c \
 		init_philos.c \
 		util_functions.c \
-		philo_one.c \
+		philo_two.c \
 		philo_utils.c
 
 MAIN =	main.c
