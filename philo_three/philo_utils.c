@@ -6,20 +6,20 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:31:20 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/07 15:10:28 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/07 16:18:02 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
-int		message(char *message, int death, t_philos *philo)
+int		message(char *message, int death, t_core *core)
 {
-	if (sem_wait(philo->lock))
-		return ((*philo->exit = err_message("can't access semaphore")));
-	if (!(*philo->exit) || death)
-		printf(message, get_time() - philo->start_time, philo->index + 1);
-	if (sem_post(philo->lock))
-		return ((*philo->exit = err_message("can't access semaphore")));
+	if (sem_wait(core->lock))
+		return ((core->exit = err_message("can't access semaphore")));
+	if (!(core->exit) || death)
+		printf(message, get_time() - core->start_time, core->index + 1);
+	if (sem_post(core->lock))
+		return ((core->exit = err_message("can't access semaphore")));
 	return (0);
 }
 
@@ -34,41 +34,40 @@ int		post_semaphores(sem_t *sem_1, int count, sem_t *sem_2)
 	return (0);
 }
 
-int		take_forks(t_philos *philo)
+int		take_forks(t_core *core)
 {
-	if (sem_wait(philo->wait))
-		return ((*philo->exit = err_message("can't access semaphore")));
-	if (sem_wait(philo->forks))
+	if (sem_wait(core->wait))
+		return ((core->exit = err_message("can't access semaphore")));
+	if (sem_wait(core->forks))
 	{
-		post_semaphores(philo->wait, 1, NULL);
-		return ((*philo->exit = err_message("can't access semaphore")));
+		post_semaphores(core->wait, 1, NULL);
+		return ((core->exit = err_message("can't access semaphore")));
 	}
-	if (*philo->exit)
-		return (!post_semaphores(philo->forks, 1, philo->wait));
-	message("%lu %d has taken a fork\n", 0, philo);
-	if (sem_wait(philo->forks))
+	if (core->exit)
+		return (!post_semaphores(core->forks, 1, core->wait));
+	message("%lu %d has taken a fork\n", 0, core);
+	if (sem_wait(core->forks))
 	{
-		post_semaphores(philo->forks, 1, philo->wait);
-		return ((*philo->exit = err_message("can't access semaphore")));
+		post_semaphores(core->forks, 1, core->wait);
+		return ((core->exit = err_message("can't access semaphore")));
 	}
-	if (*philo->exit)
-		return (!post_semaphores(philo->forks, 2, philo->wait));
-	post_semaphores(philo->wait, 1, NULL);
-	message("%lu %d has taken a fork\n", 0, philo);
+	if (core->exit)
+		return (!post_semaphores(core->forks, 2, core->wait));
+	post_semaphores(core->wait, 1, NULL);
+	message("%lu %d has taken a fork\n", 0, core);
 	return (0);
 }
 
-int		wait_threads(int stop, t_philos *philos)
+int		wait_any_process(void)
 {
-	int		index;
-	int		err;
-
-	index = -1;
-	err = 0;
-	while (++index < stop)
-		if (pthread_join(philos[index].thread, NULL))
-			err = 1;
-	return (err);
+	int		status;
+	
+	if ((waitpid(-1, &status, WUNTRACED) == -1))
+		return (err_message("waitpid failure"));
+	while (!WIFEXITED(status) && !WIFSIGNALED(status))
+		if ((waitpid(-1, &status, WUNTRACED) == -1))
+			return (err_message("waitpid failure"));
+	return (0);
 }
 
 int		destoy_allocated(t_core *core)
@@ -82,6 +81,7 @@ int		destoy_allocated(t_core *core)
 		ret = err_message("can't close semaphore");
 	if (sem_close(core->wait))
 		ret = err_message("can't close semaphore");
-	free_memory(0, (void *)core->philos, NULL);
+	if (sem_close(core->stop))
+		ret = err_message("can't close semaphore");
 	return (ret);
 }
