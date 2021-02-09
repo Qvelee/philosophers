@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 16:30:58 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/08 16:35:29 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 11:56:16 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,15 @@ void	*exit_wait(void *link_to_core)
 	t_core	*core;
 
 	core = (t_core *)link_to_core;
-	sem_wait(core->stop);
+	if (sem_wait(core->stop))
+		err_message("can't access semaphore");
 	kill_processes(0, core->pids, core->count_of_philos);
 	core->exit = 1;
-	sem_post(core->meals);
+	if (sem_post(core->meals))
+	{
+		err_message("can't access semaphore");
+		exit(1);
+	}
 	return (NULL);
 }
 

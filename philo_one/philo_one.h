@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:57 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 13:31:41 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 16:30:29 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,15 @@ typedef	struct	s_core
 
 int		parse(int argc, char **argv, t_core *core);
 int		init_philos(t_core *core);
+void	*philosopher(void *link_to_philo);
 int		take_forks(t_philos *philo);
 int		message(char *message, int death, t_philos *philo);
 int		drop_forks(t_mutex *fork_1, t_mutex *fork_2);
 int		destroy_mutexes(int stop, t_mutex **mutexes);
 int		destoy_allocated(t_core *core);
 int		wait_threads(int stop, t_philos *philos);
+void	supervisor(t_core *core);
 int		get_time(void);
-int		start_philos(t_core *core);
 int		mssleep(size_t msseconds);
 long	ft_atol(const char *str);
 int		ft_isdigit(int c);

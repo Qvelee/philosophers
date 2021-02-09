@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 13:31:35 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 12:15:53 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		destroy_mutexes(int stop, t_mutex **mutexes)
 	index = -1;
 	while (++index < stop)
 		if (pthread_mutex_destroy(&(*mutexes)[index]))
-			return (err_message("can't destroy mutex"));
+			err_message("can't destroy mutex");
 	return (0);
 }
 

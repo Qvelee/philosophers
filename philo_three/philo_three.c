@@ -6,35 +6,30 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/08 17:18:44 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 11:53:03 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-// если ошибка семофара, сразу нужно убить всех, не нужно дропать вилки.
-
 int		take_forks(t_core *core)
 {
 	if (sem_wait(core->wait))
-		return ((core->exit = err_message("can't access semaphore")));
+		return (sem_failure(core->stop, &core->exit));
 	if (sem_wait(core->forks))
-	{
-		post_sem(0, core->wait, 1, NULL);
-		return ((core->exit = err_message("can't access semaphore")));
-	}
+		return (sem_failure(core->stop, &core->exit));
 	if (core->exit)
-		return (post_sem(1, core->forks, 1, core->wait));
-	message("%lu %d has taken a fork\n", 0, core);
+		return (1);
+	if (message("%lu %d has taken a fork\n", 0, core))
+		return (1);
 	if (sem_wait(core->forks))
-	{
-		post_sem(0, core->forks, 1, core->wait);
-		return ((core->exit = err_message("can't access semaphore")));
-	}
+		return (sem_failure(core->stop, &core->exit));
 	if (core->exit)
-		return (post_sem(1, core->forks, 2, core->wait));
-	post_sem(0, core->wait, 1, NULL);
-	message("%lu %d has taken a fork\n", 0, core);
+		return (1);
+	if (post_sem(0, core->wait, 1, NULL))
+		return (sem_failure(core->stop, &core->exit));
+	if (message("%lu %d has taken a fork\n", 0, core))
+		return (1);
 	return (0);
 }
 
@@ -47,11 +42,13 @@ int		take_fork_and_eat(t_core *core)
 	if (!(core->exit))
 	{
 		core->last_time_eat = get_time();
-		message("%lu %d is eating\n", 0, core);
+		if (message("%lu %d is eating\n", 0, core))
+			return (sem_failure(core->stop, &core->exit));
 		mssleep(core->time_to_eat);
 		core->count_of_meals++;
 	}
-	post_sem(0, core->forks, 2, NULL);
+	if (post_sem(0, core->forks, 2, NULL))
+		return (sem_failure(core->stop, &core->exit));
 	return (0);
 }
 
@@ -59,11 +56,13 @@ int		goto_sleep(t_core *core)
 {
 	if (core->exit)
 		return (1);
-	message("%lu %d is sleeping\n", 0, core);
+	if (message("%lu %d is sleeping\n", 0, core))
+		return (sem_failure(core->stop, &core->exit));
 	mssleep(core->time_to_sleep);
 	if (core->exit)
 		return (1);
-	message("%lu %d is thinking\n", 0, core);
+	if (message("%lu %d is thinking\n", 0, core))
+		return (sem_failure(core->stop, &core->exit));
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/08 16:09:50 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 12:08:56 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,11 @@ static int	close_sem(int ret, sem_t *first, sem_t *second, sem_t *third)
 
 static int	unlink_sems(t_core *core)
 {
-	if (sem_unlink("forks"))
-		return (1);
-	if (sem_unlink("lock"))
-		return (1);
-	if (sem_unlink("wait"))
-		return (1);
-	if (sem_unlink("stop"))
-		return (1);
-	if (sem_unlink("meals"))
-		return (1);
+	sem_unlink("forks");
+	sem_unlink("lock");
+	sem_unlink("wait");
+	sem_unlink("stop");
+	sem_unlink("meals");
 	return (0);
 }
 

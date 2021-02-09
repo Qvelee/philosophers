@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 17:09:42 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 16:36:47 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int		init_semaphores(t_core *core)
 {
-	//fix
 	sem_unlink("forks");
 	sem_unlink("lock");
 	sem_unlink("wait");
-	if (!(core->forks = sem_open("forks", O_CREAT, 0644, core->count_of_philos)))
+	if (!(core->forks = \
+		sem_open("forks", O_CREAT, 0644, core->count_of_philos)))
 		return (err_message("can't create semaphore"));
 	if (!(core->lock = sem_open("lock", O_CREAT, 0644, 1)))
 	{

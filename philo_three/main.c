@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:18:16 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/08 17:11:24 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 11:58:47 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		kill_processes(int ret, pid_t *pids, int count)
 
 	index = -1;
 	while (++index < count && pids[index])
-		kill(pids[index], SIGQUIT);
+		kill(pids[index], SIGKILL);
 	return (1);
 }
 

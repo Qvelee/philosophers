@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:57 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 17:20:14 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 16:54:35 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 #define	ERR_INV_ARGS "error: invalid argument"
 #define ERR_MALLOC "error: can't allocate memory with malloc"
 #define ERR_SMTNWR "error: something went wrong"
-
-typedef	pthread_mutex_t	t_mutex;
 
 typedef	struct	s_philos
 {
@@ -64,8 +62,7 @@ int		parse(int argc, char **argv, t_core *core);
 int		init_philos(t_core *core);
 int		take_forks(t_philos *philo);
 int		message(char *message, int death, t_philos *philo);
-int		post_semaphores(sem_t *sem_1, int count_1, sem_t *sem_2);
-int		destroy_mutexes(int stop, t_mutex **mutexes);
+int		post_sem(int ret, sem_t *sem_1, int count, sem_t *sem_2);
 int		destoy_allocated(t_core *core);
 int		wait_threads(int stop, t_philos *philos);
 int		get_time(void);

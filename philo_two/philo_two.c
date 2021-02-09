@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 18:56:54 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/09 17:10:26 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,14 @@ int		take_fork_and_eat(t_philos *philo)
 	if (!(*philo->exit))
 	{
 		philo->last_time_eat = get_time();
-		message("%lu %d is eating\n", 0, philo);
+		if (message("%lu %d is eating\n", 0, philo))
+			return ((*philo->exit = \
+				post_sem(1, philo->forks, 2, NULL)));
 		philo->count_of_meals++;
 		mssleep(philo->time_to_eat);
 	}
-	post_semaphores(philo->forks, 2, NULL);
+	if (post_sem(0, philo->forks, 2, NULL))
+		return ((*philo->exit = 1));
 	return (0);
 }
 
@@ -60,11 +63,13 @@ int		goto_sleep(t_philos *philo)
 {
 	if (*philo->exit)
 		return (1);
-	message("%lu %d is sleeping\n", 0, philo);
+	if (message("%lu %d is sleeping\n", 0, philo))
+		return ((*philo->exit = 1));
 	mssleep(philo->time_to_sleep);
 	if (*philo->exit)
 		return (1);
-	message("%lu %d is thinking\n", 0, philo);
+	if (message("%lu %d is thinking\n", 0, philo))
+		return ((*philo->exit = 1));
 	return (0);
 }
 
@@ -94,7 +99,8 @@ int		start_philos(t_core *core)
 			philosopher, (void *)&core->philos[index]))
 		{
 			core->exit = 1;
-			wait_threads(index, core->philos);
+			if (wait_threads(index, core->philos))
+				return (err_message("can't join some thread"));
 			return (err_message("can't create thread"));
 		}
 	}
