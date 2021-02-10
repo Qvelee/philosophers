@@ -6,23 +6,22 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:38:57 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 16:30:29 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:12:42 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_ONE_H
 # define PHILO_ONE_H
 
-#include <unistd.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <stdio.h>
-
-#define	ERR_ARGS "error: wrong number of arguments"
-#define	ERR_INV_ARGS "error: invalid argument"
-#define ERR_MALLOC "error: can't allocate memory with malloc"
-#define ERR_SMTNWR "error: something went wrong"
+# include <unistd.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <stdio.h>
+# define ERR_ARGS "error: wrong number of arguments"
+# define ERR_INV_ARGS "error: invalid argument"
+# define ERR_MALLOC "error: can't allocate memory with malloc"
+# define ERR_SMTNWR "error: something went wrong"
 
 typedef	pthread_mutex_t	t_mutex;
 
@@ -57,25 +56,24 @@ typedef	struct	s_core
 	t_philos	*philos;
 }				t_core;
 
-int		parse(int argc, char **argv, t_core *core);
-int		init_philos(t_core *core);
-void	*philosopher(void *link_to_philo);
-int		take_forks(t_philos *philo);
-int		message(char *message, int death, t_philos *philo);
-int		drop_forks(t_mutex *fork_1, t_mutex *fork_2);
-int		destroy_mutexes(int stop, t_mutex **mutexes);
-int		destoy_allocated(t_core *core);
-int		wait_threads(int stop, t_philos *philos);
-void	supervisor(t_core *core);
-int		get_time(void);
-int		mssleep(size_t msseconds);
-long	ft_atol(const char *str);
-int		ft_isdigit(int c);
-int		free_memory(int ret, void *mem_1, void *mem_2);
-int		err_arguments(void);
-int		err_invalid_argument(char *argument);
-int		err_malloc(void);
-int		err_message(char *message);
-int		err_philos(t_core *core);
+int				destoy_allocated(t_core *core);
+int				destroy_mutexes(int stop, t_mutex **mutexes);
+int				parse(int argc, char **argv, t_core *core);
+int				init_philos(t_core *core);
+int				start_philos(t_core *core);
+int				wait_threads(int stop, t_philos *philos);
+int				take_forks(t_philos *philo);
+int				drop_forks(int ret, t_mutex *fork_1, t_mutex *fork_2);
+int				message(char *message, int death, t_philos *philo);
+int				get_time(void);
+int				mssleep(size_t msseconds);
+long			ft_atol(const char *str);
+int				ft_isdigit(int c);
+int				free_memory(int ret, void *mem_1, void *mem_2);
+int				err_arguments(void);
+int				err_invalid_argument(char *argument);
+int				err_malloc(void);
+int				err_message(char *message);
+int				err_philos(t_core *core);
 
 #endif

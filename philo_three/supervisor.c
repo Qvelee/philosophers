@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 16:30:58 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 11:56:16 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 17:01:21 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*meals_wait(void *link_to_core)
 {
 	t_core	*core;
 	int		index;
-	
+
 	core = (t_core *)link_to_core;
 	index = -1;
 	while (!core->exit && ++index < core->count_of_philos)
@@ -42,10 +42,14 @@ void	*meals_wait(void *link_to_core)
 	return (NULL);
 }
 
-void	supervisor(t_core *core)
+void	*supervisor(void *link_to_core)
 {
+	t_core	*core;
+
+	core = (t_core *)link_to_core;
 	while (!core->exit)
 	{
+		usleep(25);
 		if (get_time() - core->last_time_eat > core->time_to_die)
 		{
 			core->exit = 1;
@@ -62,6 +66,7 @@ void	supervisor(t_core *core)
 			core->count_of_eating = -1;
 		}
 	}
+	return (NULL);
 }
 
 int		wait_everything(t_core *core)
@@ -91,7 +96,7 @@ int		wait_everything(t_core *core)
 	return (status);
 }
 
-int 	create_threads(t_core *core)
+int		create_threads(t_core *core)
 {
 	if (pthread_create(&core->tstop, NULL, exit_wait, (void *)core))
 		return (err_message("can't create some thread"));

@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:18:16 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 16:43:31 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:08:20 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		destoy_allocated(t_core *core)
 {
 	int		ret;
-	
+
 	ret = 0;
 	if (sem_close(core->forks))
 		ret = err_message("can't close semaphore");

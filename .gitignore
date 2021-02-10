@@ -1,4 +1,8 @@
+.gitignore
 *.o
 *test*
 *.d
 .vscode
+philo_one
+philo_two
+philo_three

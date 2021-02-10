@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 15:37:35 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/06 19:14:55 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:18:05 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		mssleep(size_t msseconds)
 
 int		get_time(void)
 {
-	struct	timeval	time;
+	struct timeval	time;
 
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
@@ -44,8 +44,8 @@ int		ft_isdigit(int c)
 long	ft_atol(const char *str)
 {
 	long	result;
-	int 	index;
-	int 	minus;
+	int		index;
+	int		minus;
 
 	index = 0;
 	result = 0;

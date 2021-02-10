@@ -6,13 +6,13 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 12:15:53 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:06:03 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-int		destroy_mutexes(int stop, t_mutex **mutexes)
+int			destroy_mutexes(int stop, t_mutex **mutexes)
 {
 	int		index;
 
@@ -23,9 +23,9 @@ int		destroy_mutexes(int stop, t_mutex **mutexes)
 	return (0);
 }
 
-int		init_mutexes(t_core *core)
+static int	init_mutexes(t_core *core)
 {
-	int 	index;
+	int		index;
 
 	index = -1;
 	if (pthread_mutex_init(&core->lock, NULL))
@@ -41,7 +41,7 @@ int		init_mutexes(t_core *core)
 	return (0);
 }
 
-void	set_philos_values(t_core *core)
+static void	set_philos_values(t_core *core)
 {
 	int		index;
 	int		left_fork;
@@ -67,7 +67,7 @@ void	set_philos_values(t_core *core)
 	}
 }
 
-int		init_philos(t_core *core)
+int			init_philos(t_core *core)
 {
 	if (!(core->philos = \
 		(t_philos *)malloc(sizeof(t_philos) * core->count_of_philos)))
@@ -76,8 +76,10 @@ int		init_philos(t_core *core)
 		(t_mutex *)malloc(sizeof(t_mutex) * core->count_of_philos)))
 		return (free_memory(err_malloc(), (void *)core->philos, NULL));
 	if (init_mutexes(core))
+	{
 		return (free_memory(err_message("can't init mutex"), \
 			(void *)core->philos, (void *)core->forks));
+	}
 	core->start_time = get_time();
 	core->exit = 0;
 	set_philos_values(core);

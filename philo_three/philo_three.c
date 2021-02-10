@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 11:53:03 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 18:21:56 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,8 @@ int		goto_sleep(t_core *core)
 	return (0);
 }
 
-void	*philosopher(void *link_to_core)
+void	philosopher(t_core *core)
 {
-	t_core	*core;
-
-	core = (t_core *)link_to_core;
 	while (!core->exit)
 	{
 		if (take_fork_and_eat(core))
@@ -78,20 +75,19 @@ void	*philosopher(void *link_to_core)
 		if (goto_sleep(core))
 			break ;
 	}
-	return (NULL);
 }
 
 void	philos(t_core *core)
 {
 	pthread_t	stop;
 
-	if (pthread_create(&core->thread, NULL, philosopher, (void *)core))
+	if (pthread_create(&core->thread, NULL, supervisor, (void *)core))
 	{
 		err_message("can't create thread");
 		if (sem_post(core->stop))
 			exit(err_message("can't access semaphore"));
 	}
-	supervisor(core);
+	philosopher(core);
 	if (pthread_join(core->thread, NULL))
 		err_message("can't join some thread");
 	if (sem_post(core->stop))

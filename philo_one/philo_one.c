@@ -6,30 +6,17 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 16:34:02 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:06:53 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-int		wait_threads(int stop, t_philos *philos)
-{
-	int		index;
-	int		err;
-
-	index = -1;
-	err = 0;
-	while (++index < stop)
-		if (pthread_join(philos[index].thread, NULL))
-			err = 1;
-	return (err);
-}
-
 void	supervisor(t_core *core)
 {
 	int		index;
 	int		meals;
-	
+
 	while (!core->exit)
 	{
 		index = -1;
@@ -62,12 +49,15 @@ int		take_fork_and_eat(t_philos *philo)
 	{
 		philo->last_time_eat = get_time();
 		if (message("%lu %d is eating\n", 0, philo))
+		{
 			return ((*philo->exit = \
-				!drop_forks(philo->left_fork, philo->rigth_fork)));
+				drop_forks(1, philo->left_fork, philo->rigth_fork)));
+		}
 		philo->count_of_meals++;
 		mssleep(philo->time_to_eat);
 	}
-	drop_forks(philo->left_fork, philo->rigth_fork);
+	if (drop_forks(0, philo->left_fork, philo->rigth_fork))
+		return ((*philo->exit = 1));
 	return (0);
 }
 
@@ -100,4 +90,26 @@ void	*philosopher(void *link_to_philo)
 			break ;
 	}
 	return (NULL);
+}
+
+int		start_philos(t_core *core)
+{
+	int		index;
+
+	index = -1;
+	while (++index < core->count_of_philos)
+	{
+		if (pthread_create(&core->philos[index].thread, NULL, \
+			philosopher, (void *)&core->philos[index]))
+		{
+			core->exit = 1;
+			if (wait_threads(index, core->philos))
+				return (err_message("can't join some thread"));
+			return (err_message("can't create thread"));
+		}
+	}
+	supervisor(core);
+	if (wait_threads(core->count_of_philos, core->philos))
+		return (err_message("can't join some thread"));
+	return (0);
 }

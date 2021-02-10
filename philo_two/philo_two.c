@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 17:10:26 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:12:14 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	supervisor(t_core *core)
 {
 	int		index;
 	int		meals;
-	
+
 	while (!core->exit)
 	{
 		index = -1;
@@ -49,8 +49,10 @@ int		take_fork_and_eat(t_philos *philo)
 	{
 		philo->last_time_eat = get_time();
 		if (message("%lu %d is eating\n", 0, philo))
+		{
 			return ((*philo->exit = \
 				post_sem(1, philo->forks, 2, NULL)));
+		}
 		philo->count_of_meals++;
 		mssleep(philo->time_to_eat);
 	}

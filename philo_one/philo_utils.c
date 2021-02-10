@@ -6,11 +6,24 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:31:20 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 16:48:19 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 13:45:45 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+
+int		wait_threads(int stop, t_philos *philos)
+{
+	int		index;
+	int		err;
+
+	index = -1;
+	err = 0;
+	while (++index < stop)
+		if (pthread_join(philos[index].thread, NULL))
+			err = 1;
+	return (err);
+}
 
 int		message(char *message, int death, t_philos *philo)
 {
@@ -23,15 +36,20 @@ int		message(char *message, int death, t_philos *philo)
 	return (0);
 }
 
-int		drop_forks(t_mutex *fork_1, t_mutex *fork_2)
+int		drop_forks(int ret, t_mutex *fork_1, t_mutex *fork_2)
 {
+	int		tret;
+
+	tret = 0;
 	if (fork_1)
 		if (pthread_mutex_unlock(fork_1))
-			err_message("can't unlock mutex");
+			tret = err_message("can't unlock mutex");
 	if (fork_2)
 		if (pthread_mutex_unlock(fork_2))
-			err_message("can't unlock mutex");
-	return (0);
+			tret = err_message("can't unlock mutex");
+	if (tret)
+		ret = tret;
+	return (ret);
 }
 
 int		take_forks(t_philos *philo)
@@ -44,9 +62,9 @@ int		take_forks(t_philos *philo)
 	if (pthread_mutex_lock(first))
 		return ((*philo->exit = err_message("can't lock mutex")));
 	if (*philo->exit)
-		return ((*philo->exit = !drop_forks(first, NULL)));
+		return ((*philo->exit = drop_forks(1, first, NULL)));
 	if (message("%lu %d has taken a fork\n", 0, philo))
-		return ((*philo->exit = !drop_forks(first, NULL)));
+		return ((*philo->exit = drop_forks(1, first, NULL)));
 	if (pthread_mutex_lock(second))
 	{
 		if (pthread_mutex_unlock(first))
@@ -54,8 +72,8 @@ int		take_forks(t_philos *philo)
 		return ((*philo->exit = err_message("can't lock mutex")));
 	}
 	if (*philo->exit)
-		return (!drop_forks(first, second));
+		return (drop_forks(1, first, second));
 	if (message("%lu %d has taken a fork\n", 0, philo))
-		return ((*philo->exit = !drop_forks(first, second)));
+		return ((*philo->exit = drop_forks(1, first, second)));
 	return (0);
 }

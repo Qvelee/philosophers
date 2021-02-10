@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 12:08:56 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:49:39 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,21 @@ static int	init_semaphores(t_core *core)
 	if (!(core->forks = sem_open("forks", O_CREAT, 0644, \
 		core->count_of_philos)))
 		return (err_message("can't create semaphore"));
-	if (!(core->lock = sem_open("lock", O_CREAT, 0644, 1)))
+	else if (!(core->lock = sem_open("lock", O_CREAT, 0644, 1)))
 		return (close_sem(err_message("can't create semaphore"), \
 			core->forks, NULL, NULL));
-	if (!(core->wait = sem_open("wait", O_CREAT, 0644, 1)))
+	else if (!(core->wait = sem_open("wait", O_CREAT, 0644, 1)))
 		return (close_sem(err_message("can't create semaphore"), \
 			core->forks, core->lock, NULL));
-	if (!(core->stop = sem_open("stop", O_CREAT, 0644, 0)))
+	else if (!(core->stop = sem_open("stop", O_CREAT, 0644, 0)))
 		return (close_sem(err_message("can't create semaphore"), \
 			core->forks, core->lock, core->stop));
-	if (!(core->meals = sem_open("meals", O_CREAT, 0644, 0)))
+	else if (!(core->meals = sem_open("meals", O_CREAT, 0644, 0)))
+	{
 		return (close_sem(err_message("can't create semaphore"), \
-			core->forks, core->lock, core->stop) && \
+			core->forks, core->lock, core->wait) && \
 			close_sem(1, core->stop, NULL, NULL));
+	}
 	return (0);
 }
 

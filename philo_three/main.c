@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:18:16 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/09 11:58:47 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:18:45 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		kill_processes(int ret, pid_t *pids, int count)
 int		destoy_allocated(t_core *core)
 {
 	int		ret;
-	
+
 	ret = 0;
 	if (sem_close(core->forks))
 		ret = err_message("can't close semaphore");
