@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/10 15:06:53 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/11 11:21:26 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	supervisor(t_core *core)
 
 	while (!core->exit)
 	{
+		usleep(25);
 		index = -1;
 		meals = 0;
 		while (++index < core->count_of_philos)

@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 16:30:58 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/10 17:01:21 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/11 13:07:14 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ void	*exit_wait(void *link_to_core)
 	kill_processes(0, core->pids, core->count_of_philos);
 	core->exit = 1;
 	if (sem_post(core->meals))
-	{
 		err_message("can't access semaphore");
-		exit(1);
-	}
 	return (NULL);
 }
 
@@ -37,8 +34,16 @@ void	*meals_wait(void *link_to_core)
 	core = (t_core *)link_to_core;
 	index = -1;
 	while (!core->exit && ++index < core->count_of_philos)
-		sem_wait(core->meals);
-	sem_post(core->stop);
+		if (sem_wait(core->meals))
+		{
+			err_message("can't access semaphore");
+			break ;
+		}
+	if (sem_post(core->stop))
+	{
+		err_message("can't access semaphore");
+		kill_processes(0, core->pids, core->count_of_philos);
+	}
 	return (NULL);
 }
 
@@ -72,7 +77,6 @@ void	*supervisor(void *link_to_core)
 int		wait_everything(t_core *core)
 {
 	int		status;
-	int		index;
 
 	core->index = -1;
 	while (++core->index < core->count_of_philos)
@@ -85,10 +89,11 @@ int		wait_everything(t_core *core)
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			if ((waitpid(-1, &status, WUNTRACED) == -1))
 				err_message("waitpid failure");
-		if (!WIFEXITED(status) && WEXITSTATUS(status) || \
-			!WIFSIGNALED(status) && WTERMSIG(status) != 9)
-			return (kill_processes(0, core->pids, core->count_of_philos));
+		if ((WIFEXITED(status) && WEXITSTATUS(status)) || \
+			(WIFSIGNALED(status) && WTERMSIG(status) != 9))
+			return (kill_processes(1, core->pids, core->count_of_philos));
 	}
+	status = 0;
 	if (pthread_join(core->tstop, NULL))
 		status = err_message("can't join some thread");
 	if (pthread_join(core->tmeals, NULL))

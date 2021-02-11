@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 15:16:49 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/10 18:21:56 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/11 12:39:03 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ void	philosopher(t_core *core)
 
 void	philos(t_core *core)
 {
-	pthread_t	stop;
-
 	if (pthread_create(&core->thread, NULL, supervisor, (void *)core))
 	{
 		err_message("can't create thread");

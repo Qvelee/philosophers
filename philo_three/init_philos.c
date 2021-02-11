@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/10 15:49:39 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/11 11:50:18 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	close_sem(int ret, sem_t *first, sem_t *second, sem_t *third)
 	return (ret);
 }
 
-static int	unlink_sems(t_core *core)
+static int	unlink_sems(void)
 {
 	sem_unlink("forks");
 	sem_unlink("lock");
@@ -38,7 +38,7 @@ static int	unlink_sems(t_core *core)
 
 static int	init_semaphores(t_core *core)
 {
-	if (unlink_sems(core))
+	if (unlink_sems())
 		return (err_message("can't unlink semaphore"));
 	if (!(core->forks = sem_open("forks", O_CREAT, 0644, \
 		core->count_of_philos)))

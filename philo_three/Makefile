@@ -6,7 +6,7 @@
 #    By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/14 14:18:05 by nelisabe          #+#    #+#              #
-#    Updated: 2021/02/08 11:06:42 by nelisabe         ###   ########.fr        #
+#    Updated: 2021/02/11 12:33:21 by nelisabe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME =	philo_three
 
 COMP =	clang
 
-FLAGS =	-pthread #-Wall -Wextra -Werror
+FLAGS =	-pthread -Wall -Wextra -Werror
 
 HEADER = philo_three.h
 
