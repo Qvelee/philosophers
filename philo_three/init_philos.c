@@ -6,7 +6,7 @@
 /*   By: nelisabe <nelisabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 18:19:24 by nelisabe          #+#    #+#             */
-/*   Updated: 2021/02/11 11:50:18 by nelisabe         ###   ########.fr       */
+/*   Updated: 2021/02/11 14:18:27 by nelisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	init_semaphores(t_core *core)
 
 int			init_philos(t_core *core)
 {
-	if (!(core->pids = (pid_t *)malloc(sizeof(core->count_of_philos))))
+	if (!(core->pids = (pid_t *)malloc(sizeof(pid_t) * core->count_of_philos)))
 		return (1);
 	memset((void *)core->pids, 0, core->count_of_philos);
 	if (init_semaphores(core))
