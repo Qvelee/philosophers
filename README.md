@@ -6,8 +6,10 @@ This project represents the solution of [dining philosophers problem](https://en
 
 Each directory _philo_*_ contains solution with some differences in approach:
 
- • philo_one - using threads and mutexes
- • philo_two - using threads and semaphores
+ • philo_one - using threads and mutexes;
+ 
+ • philo_two - using threads and semaphores;
+ 
  • philo_three - using processes and semaphores.
  
 > **Build**
