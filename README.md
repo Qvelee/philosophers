@@ -4,7 +4,7 @@ This project represents the solution of [dining philosophers problem](https://en
 
 > **Description**
 
-Each directory _philo_*_ contains solution with some differences in approach:
+Each directory "philo_*" contains solution with some differences in approach:
 
  • philo_one - using threads and mutexes;
  • philo_two - using threads and semaphores;
