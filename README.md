@@ -14,9 +14,9 @@ Each directory _philo_*_ contains solution with some differences in approach:
   1) `cd` to philo_* directory;
   2) `make` creates executable file named "philo_*number*".
  
- To remove all files created by program enter `make fclean', or `make clean` to remove all except executable.
+ To remove all files created by program enter `make fclean`, or `make clean` to remove all except executable.
  
 > **Usage**
 
  Program arguments:
-  `number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]`, time in ms;
+  `number_of_philosophers` `time_to_die` `time_to_eat` `time_to_sleep` `[number_of_times_each_philosopher_must_eat]`, time in ms;
