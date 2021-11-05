@@ -17,7 +17,7 @@ Each directory "philo_*" contains solution with some differences in approach:
   1) `cd` to philo_* directory;
   2) `make` creates executable named "philo_*number*".
  
- To remove all files created by program enter `make fclean`, or `make clean` to remove all except executable.
+ To remove all files created by program run `make fclean`, or `make clean` to remove all except executable.
  
 ### Usage
 
