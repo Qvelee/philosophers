@@ -26,7 +26,4 @@ Each directory "philo_*" contains solution with some differences in approach:
  
  For example `./philo_one 4 500 100 100`
 
-
-
-https://user-images.githubusercontent.com/36854467/140602688-b66e1c16-541e-4d05-a553-2b909d7d956a.mp4
-
+![ezgif com-gif-maker(4)](https://user-images.githubusercontent.com/36854467/140602711-d149ef78-d794-4cfe-ac9f-e6c6985072a5.gif)
