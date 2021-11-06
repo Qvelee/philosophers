@@ -24,4 +24,9 @@ Each directory "philo_*" contains solution with some differences in approach:
  Program arguments:
   `number_of_philosophers` `time_to_die` `time_to_eat` `time_to_sleep` `[number_of_times_each_philosopher_must_eat]`, time in ms.
  
- For example `./philo_one 5 500 100 100`
+ For example `./philo_one 4 500 100 100`
+
+
+
+https://user-images.githubusercontent.com/36854467/140602688-b66e1c16-541e-4d05-a553-2b909d7d956a.mp4
+
